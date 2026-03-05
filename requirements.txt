@@ -1,0 +1,4 @@
+pdfrw
+pandas
+openpyxl
+streamlit
