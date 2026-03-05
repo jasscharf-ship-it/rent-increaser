@@ -12,7 +12,6 @@ ANNOT_FIELD_KEY = '/T'
 ANNOT_VAL_KEY = '/V'
 SUBTYPE_KEY = '/Subtype'
 WIDGET_SUBTYPE_KEY = '/Widget'
-'
 
 def fill_pdf(template_path, output_path, data_dict):
     template = pdfrw.PdfReader(template_path)
