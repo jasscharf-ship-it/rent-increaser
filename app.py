@@ -37,6 +37,12 @@ def clean(val):
         return ""
     return str(val)
 
+def to_currency(val):
+    try:
+        return f"{float(val):.2f}"
+    except (ValueError, TypeError):
+        return "0.00"
+
 password = st.text_input("Enter password", type="password")
 
 if password != st.secrets["app_password"]:
@@ -61,20 +67,18 @@ if excel_file:
         with zipfile.ZipFile(zip_buffer, "w") as zip_file:
             for index, row in df.iterrows():
                 data = {
-                "Resident Name 2": clean(row["Tenant(s) Name"]),
-                "Premises Address 2": clean(row["Property Address"]),
-                "effective date": pd.to_datetime(row["New Rent Increase Start Date"]).strftime("%m/%d/%Y"),    
-                "percent": f"{row['% Increase'] * 100:.2f}%",
-                "Increased amount": f"{row['Total Increase $']:.2f}",
-                "Total amount": f"{row['New Monthly Rate']:.2f}",
-                "Text2": f"{row['Amount of Increase']:.2f}",
-                "Text3": f"{row['New Rent Amount']:.2f}",
-                "Text5": f"{row['Amount of Increase2']:.2f}",
-                "Text6": f"{row['New Fees Amount']:.2f}",
-                "Text16": f"{row['New Monthly Rate']:.2f}",
-
-
-            }   
+    "Resident Name 2": clean(row["Tenant(s) Name"]),
+    "Premises Address 2": clean(row["Property Address"]),
+    "effective date": pd.to_datetime(row["New Rent Increase Start Date"]).strftime("%m/%d/%Y"),    
+    "percent": f"{row['% Increase'] * 100:.2f}%",
+    "Increased amount": to_currency(row.get("Total Increase $")),
+    "Total amount": to_currency(row.get("New Monthly Rate")),
+    "Text2": to_currency(row.get("Amount of Increase")),
+    "Text3": to_currency(row.get("New Rent Amount")),
+    "Text5": to_currency(row.get("Amount of Increase2")),
+    "Text6": to_currency(row.get("New Fees Amount")),
+    "Text16": to_currency(row.get("New Monthly Rate")),
+}
 
                 # Write PDF to memory instead of disk
                 pdf_buffer = io.BytesIO()
